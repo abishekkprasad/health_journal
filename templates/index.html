@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Fat Loss Journal</title>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-10">
+    <div class="max-w-4xl mx-auto">
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-3xl font-bold text-emerald-400">Health Journal</h1>
+                <p class="text-slate-400">Daily BMR: <span class="font-mono text-white">{{ bmr }} kcal</span></p>
+            </div>
+            <div class="text-right text-xs text-slate-500">
+                Formula: Katch-McArdle
+            </div>
+        </header>
+
+        <div class="bg-slate-800 rounded-2xl p-6 shadow-2xl mb-10 border border-slate-700">
+            <h2 class="text-lg font-semibold mb-4 text-slate-300">Log Daily Activity</h2>
+            <form action="/log" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">WALK (KM)</label>
+                    <input name="walk" type="number" step="0.1" required class="w-full bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">CALS EATEN</label>
+                    <input name="consumed" type="number" required class="w-full bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-1">WORKOUT BURN</label>
+                    <input name="burnt" type="number" required class="w-full bg-slate-700 rounded-lg p-3 outline-none focus:ring-2 focus:ring-emerald-500 transition">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-bold py-3 rounded-lg shadow-lg shadow-emerald-900/20 transition-all">
+                        Log Progress
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-slate-700/50">
+                    <tr>
+                        <th class="p-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Walk</th>
+                        <th class="p-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Total Burn</th>
+                        <th class="p-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Net Deficit</th>
+                        <th class="p-4 text-xs font-bold text-emerald-400 uppercase tracking-wider">Est. Fat Loss</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-700">
+                    {% for log in logs %}
+                    <tr class="hover:bg-slate-700/30 transition">
+                        <td class="p-4 font-medium">{{ log.walk }} km</td>
+                        <td class="p-4 text-slate-300">{{ log.total_burn }} kcal</td>
+                        <td class="p-4 text-slate-300">{{ log.deficit }} kcal</td>
+                        <td class="p-4 font-bold text-emerald-400">+ {{ log.fat_loss }}g</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if not logs %}
+            <div class="p-10 text-center text-slate-500 italic">No logs yet. Start by adding your first entry above!</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
